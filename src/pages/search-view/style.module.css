@@ -1,0 +1,20 @@
+.header {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.searchBar {
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+}
+
+.searchBar input {
+    width: 50%;
+    height: 2rem;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+}
