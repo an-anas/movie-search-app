@@ -15,11 +15,12 @@ export const SearchView = () => {
 
     useEffect(() => {
         if (debouncedSearchQuery.length >= 3) {
+            setSearchResults([]);
             setIsSearching(true);
             setIsError(false);
             TmdbService.searchMovies(debouncedSearchQuery, 1)
                 .then((response) => {
-                    setSearchResults(response.results);
+                    setSearchResults(response.results.map(result=> new Movie(result)));
                     setIsSearching(false);
                 })
                 .catch(() => {
@@ -49,7 +50,7 @@ export const SearchView = () => {
                     {searchResults && searchResults.map((movie) => (
                         <div key={movie.id} className={style.result}>
                             <Link to={`/details/${movie.id}`}>
-                                {movie.title} ({movie.release_date})
+                                {movie.title} {movie.releaseYear}
                             </Link>
                         </div>
                     ))}
