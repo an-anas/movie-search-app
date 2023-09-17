@@ -17,10 +17,10 @@ export const SearchView = () => {
 
     useEffect(() => {
         if (debouncedSearchQuery.length >= 3) {
-            setSearchResults([]);
             setIsSearching(true);
             setIsError(false);
-            TmdbService.searchMovies(debouncedSearchQuery, page)
+            setTotalPages(0);
+            TmdbService.searchMovies(debouncedSearchQuery, 1)
                 .then((response) => {
                     setSearchResults(response.results.map(result => new Movie(result)));
                     setPage(response.page);
@@ -35,7 +35,21 @@ export const SearchView = () => {
             setSearchResults([]);
             setTotalPages(0);
         }
-    }, [debouncedSearchQuery, page]);
+    }, [debouncedSearchQuery]);
+
+    useEffect(() => {
+            TmdbService.searchMovies(debouncedSearchQuery, page)
+                .then((response) => {
+                    setSearchResults(response.results.map(result => new Movie(result)));
+                    setPage(response.page);
+                    setTotalPages(response.total_pages);
+                    setIsSearching(false);
+                })
+                .catch(() => {
+                    setIsError(true);
+                    setIsSearching(false);
+                });
+    }, [page]);
 
     return (
         <>
@@ -66,7 +80,7 @@ export const SearchView = () => {
                     <div className={style.pagination}>
                         <button onClick={() => setPage(1)} disabled={page === 1}>First</button>
                         <button onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
-                        <div className={style.page}>Page {page}</div>
+                        <div className={style.page}>Page {page} / {totalPages}</div>
                         <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
                         <button onClick={() => setPage(totalPages)} disabled={page === totalPages}>Last</button>
                     </div>

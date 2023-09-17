@@ -1,5 +1,5 @@
 import style from './style.module.css';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Movie } from '../../models/movie';
 import { TmdbService } from '@/services/tmdb-service';
@@ -18,8 +18,8 @@ export const DetailsView = () => {
     }
 
     const imagePath = movie.posterPath
-    ? `https://image.tmdb.org/t/p/original${movie.posterPath}` 
-    : posterNaImagePath;
+        ? `https://image.tmdb.org/t/p/original${movie.posterPath}`
+        : posterNaImagePath;
 
     return (
         <>
@@ -37,6 +37,11 @@ export const DetailsView = () => {
                 <div className={style.title}>{movie.title}</div>
                 <div className={style.releaseYear}>{movie.releaseYear}</div>
                 <div className={style.overview}>{movie.overview}</div>
+            </div>
+            <div className={style.button}>
+                <Link to={`/`}>
+                    Return to Search results
+                </Link>
             </div>
         </>
     );

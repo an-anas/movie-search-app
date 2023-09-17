@@ -28,3 +28,26 @@
     margin: 1rem;
     text-align: justify;
 }
+
+.button{
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #679d69;
+    border: 2px solid #679d69;
+    border-radius: 5px;
+    padding: 10px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+
+    & a {
+        color: white;
+        text-decoration: none;
+    }
+    &:hover {
+        background-color: #5dbb62;
+    }
+}
