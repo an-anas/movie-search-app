@@ -1,6 +1,6 @@
 import { useDebounce } from "@/hooks/use-debounce";
 import { Movie } from "@/models/movie";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import style from "./style.module.css";
 import { TmdbService } from "@/services/tmdb-service";
@@ -8,48 +8,36 @@ import { TmdbService } from "@/services/tmdb-service";
 export const SearchView = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<Movie[]>([]);
-    const [page, setPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [isSearching, setIsSearching] = useState(false);
     const [isError, setIsError] = useState(false);
 
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-    useEffect(() => {
-        if (debouncedSearchQuery.length >= 3) {
-            setIsSearching(true);
-            setIsError(false);
-            setTotalPages(0);
-            TmdbService.searchMovies(debouncedSearchQuery, 1)
-                .then((response) => {
-                    setSearchResults(response.results.map(result => new Movie(result)));
-                    setPage(response.page);
-                    setTotalPages(response.total_pages);
-                    setIsSearching(false);
-                })
-                .catch(() => {
-                    setIsError(true);
-                    setIsSearching(false);
-                });
-        } else {
-            setSearchResults([]);
-            setTotalPages(0);
-        }
+    const searchMovies = useCallback((page: number) => {
+        setIsError(false);
+        TmdbService.searchMovies(debouncedSearchQuery, page).then((response) => {
+            setIsSearching(false);
+            if (response.results) {
+                setSearchResults(response.results.map((movie) => new Movie(movie)));
+                setCurrentPage(response.page);
+                setTotalPages(response.total_pages);
+            } else {
+                setIsError(true);
+            }
+        });
     }, [debouncedSearchQuery]);
 
     useEffect(() => {
-            TmdbService.searchMovies(debouncedSearchQuery, page)
-                .then((response) => {
-                    setSearchResults(response.results.map(result => new Movie(result)));
-                    setPage(response.page);
-                    setTotalPages(response.total_pages);
-                    setIsSearching(false);
-                })
-                .catch(() => {
-                    setIsError(true);
-                    setIsSearching(false);
-                });
-    }, [page]);
+        if (debouncedSearchQuery) {
+            setIsSearching(true);
+            setIsError(false);
+            searchMovies(1);
+        } else {
+            setSearchResults([]);
+        }
+    }, [debouncedSearchQuery, searchMovies]);
 
     return (
         <>
@@ -64,7 +52,7 @@ export const SearchView = () => {
                 />
             </div>
 
-            {isSearching && <div>Searching...</div>}
+            {isSearching && (<div>Searching...</div>)}
             {isError && <div>Something went wrong!</div>}
 
             <div className={style.results}>
@@ -78,11 +66,11 @@ export const SearchView = () => {
 
                 {totalPages > 1 && (
                     <div className={style.pagination}>
-                        <button onClick={() => setPage(1)} disabled={page === 1}>First</button>
-                        <button onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
-                        <div className={style.page}>Page {page} / {totalPages}</div>
-                        <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
-                        <button onClick={() => setPage(totalPages)} disabled={page === totalPages}>Last</button>
+                        <button onClick={() => searchMovies(1)} disabled={currentPage === 1}>First</button>
+                        <button onClick={() => searchMovies(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                        <div className={style.page}>Page {currentPage} / {totalPages}</div>
+                        <button onClick={() => searchMovies(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                        <button onClick={() => searchMovies(totalPages)} disabled={currentPage === totalPages}>Last</button>
                     </div>
                 )}
             </div>
