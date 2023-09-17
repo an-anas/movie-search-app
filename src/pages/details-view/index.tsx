@@ -14,7 +14,7 @@ export const DetailsView = () => {
     }, [id]);
 
     if (!movie) {
-        return <div>Loading...</div>;
+        return (null);
     }
 
     const imagePath = movie.posterPath
@@ -38,9 +38,11 @@ export const DetailsView = () => {
                 <div className={style.releaseYear}>{movie.releaseYear}</div>
                 <div className={style.overview}>{movie.overview}</div>
             </div>
-            <div className={style.button}>
+            <div className={style.buttonContainer}>
                 <Link to={`/`}>
-                    Return to Search results
+                    <div className={style.button}>
+                        Return to Search results
+                    </div>
                 </Link>
             </div>
         </>

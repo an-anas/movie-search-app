@@ -2,27 +2,32 @@ import { useAppDispatch, useAppSelector, useDebounce } from "@/app/hooks";
 import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import style from "./style.module.css";
-import { getMoviesList, selectSearchState } from "./slice";
+import { clearSearchResults, getMoviesList, selectSearchState } from "./slice";
 
 export const SearchView = () => {
     const dispatch = useAppDispatch();
-    const { isSearching, isError, keyword, currentPage, totalPages, movies }
+    const { isSearching, isError, keyword, currentPage, totalPages, totalResults, movies }
         = useAppSelector(selectSearchState);
 
     const [searchQuery, setSearchQuery] = useState(keyword);
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-    const searchMovies = useCallback((page: number) => {
-        if (debouncedSearchQuery === keyword && page === currentPage) return;
-
-        dispatch(getMoviesList({ query: debouncedSearchQuery, page }));
-    }, [currentPage, debouncedSearchQuery, dispatch, keyword]);
+    const searchMovies = useCallback((page: number, isSearching?: boolean) => {
+        dispatch(getMoviesList({ query: debouncedSearchQuery, page, isSearching }));
+    }, [debouncedSearchQuery, dispatch]);
 
     useEffect(() => {
-        if (debouncedSearchQuery.length > 2) {
-            searchMovies(1);
+        if (totalResults > 0 && debouncedSearchQuery === keyword) {
+            return;
         }
-    }, [debouncedSearchQuery, searchMovies]);
+
+        if (debouncedSearchQuery.length > 2) {
+            searchMovies(1, true);
+        }
+        else {
+            dispatch(clearSearchResults());
+        }
+    }, [debouncedSearchQuery, dispatch, keyword, searchMovies, totalResults]);
 
     return (
         <>
@@ -38,6 +43,7 @@ export const SearchView = () => {
             </div>
 
             {isSearching && (<div>Searching...</div>)}
+            {totalResults === 0 && !isSearching && (<div>No results found</div>)}
             {isError && <div>Something went wrong!</div>}
 
             <div className={style.results}>

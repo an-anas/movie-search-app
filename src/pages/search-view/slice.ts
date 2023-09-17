@@ -27,7 +27,14 @@ export interface SearchState {
 export const searchViewSlice = createSlice({
     name: 'search',
     initialState,
-    reducers: {},
+    reducers: {
+        clearSearchResults: (state) => {
+            state.movies = [];
+            state.currentPage = 0;
+            state.totalPages = 0;
+            state.totalResults = 0;
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(getMoviesList.fulfilled, (state, action) => {
             state.isSearching = false;
@@ -44,24 +51,24 @@ export const searchViewSlice = createSlice({
             state.movies = [];
             state.currentPage = 0;
             state.totalPages = 0;
+            state.totalResults = 0;
         });
-        builder.addCase(getMoviesList.pending, (state) => {
-            state.isSearching = true;
+        builder.addCase(getMoviesList.pending, (state, action) => {
+            state.isSearching = Boolean(action.meta.arg.isSearching);
             state.isError = false;
-            state.movies = [];
-            state.currentPage = 0;
-            state.totalPages = 0;
         });
     },
 });
 
 export const getMoviesList = createAsyncThunk(
     'search/getMoviesList',
-    async (params: { query: string, page: number }) => {
+    async (params: { query: string, page: number, isSearching?: boolean }) => {
         const response = await ApiService.getMoviesList(params.query, params.page);
         return response;
     }
 );
+
+export const { clearSearchResults } = searchViewSlice.actions;
 
 export const selectSearchState = (state: {search: SearchState}) => state.search;
 
