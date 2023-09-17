@@ -1,0 +1,30 @@
+.header {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.poster {
+    margin: 1rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.releaseYear {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.overview {
+    margin: 1rem;
+    text-align: justify;
+}
