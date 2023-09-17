@@ -63,6 +63,6 @@ export const getMoviesList = createAsyncThunk(
     }
 );
 
-export const selectSearchView = (state: {search: SearchState}) => state.search;
+export const selectSearchState = (state: {search: SearchState}) => state.search;
 
 export default searchViewSlice.reducer;

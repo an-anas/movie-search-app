@@ -2,19 +2,21 @@ import { useAppDispatch, useAppSelector, useDebounce } from "@/app/hooks";
 import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import style from "./style.module.css";
-import { getMoviesList } from "./slice";
+import { getMoviesList, selectSearchState } from "./slice";
 
 export const SearchView = () => {
     const dispatch = useAppDispatch();
     const { isSearching, isError, keyword, currentPage, totalPages, movies }
-        = useAppSelector((state) => state.search);
+        = useAppSelector(selectSearchState);
 
     const [searchQuery, setSearchQuery] = useState(keyword);
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
     const searchMovies = useCallback((page: number) => {
+        if (debouncedSearchQuery === keyword && page === currentPage) return;
+
         dispatch(getMoviesList({ query: debouncedSearchQuery, page }));
-    }, [debouncedSearchQuery, dispatch]);
+    }, [currentPage, debouncedSearchQuery, dispatch, keyword]);
 
     useEffect(() => {
         if (debouncedSearchQuery.length > 2) {
@@ -40,9 +42,11 @@ export const SearchView = () => {
 
             <div className={style.results}>
                 {movies && movies.map((movie) => (
-                    <div key={movie.id} className={style.result}>
+                    <div className={style.resultContainer} key={movie.id}>
                         <Link to={`/details/${movie.id}`}>
-                            {movie.title} {movie.releaseYear}
+                            <div key={movie.id} className={style.result}>
+                                {movie.title} {movie.releaseYear}
+                            </div>
                         </Link>
                     </div>
                 ))}
@@ -56,7 +60,7 @@ export const SearchView = () => {
                         <button onClick={() => searchMovies(totalPages)} disabled={currentPage === totalPages}>Last</button>
                     </div>
                 )}
-            </div>
+            </div >
         </>
     );
 }
