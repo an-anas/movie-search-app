@@ -1,6 +1,6 @@
 import { Genre, MovieResult } from "./search-movie-result";
 
-export class Movie {
+export interface Movie {
     id: number;
     title: string;
     overview: string;
@@ -10,22 +10,18 @@ export class Movie {
     releaseDate: string;
     runtime: number;
     genres: Genre[];
-
-    constructor(movie: MovieResult) {
-        this.id = movie.id;
-        this.title = movie.title;
-        this.overview = movie.overview;
-        this.posterPath = movie.poster_path;
-        this.backdropPath = movie.backdrop_path;
-        this.voteAverage = movie.vote_average;
-        this.releaseDate = movie.release_date;
-        this.runtime = movie.runtime;
-        this.genres = movie.genres;
-    }
-
-    get releaseYear() {
-        return this.releaseDate
-        ? `(${this.releaseDate.split('-')[0]})`
-        : '';
-    }
+    readonly releaseYear: string;
 }
+
+export const createMovie = (movie: MovieResult): Movie => ({
+    id: movie.id,
+    title: movie.title,
+    overview: movie.overview,
+    posterPath: movie.poster_path,
+    backdropPath: movie.backdrop_path,
+    voteAverage: movie.vote_average,
+    releaseDate: movie.release_date,
+    runtime: movie.runtime,
+    genres: movie.genres,
+    releaseYear: movie.release_date ? `(${movie.release_date.split('-')[0]})` : '',
+});

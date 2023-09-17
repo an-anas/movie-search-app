@@ -1,16 +1,16 @@
 import style from './style.module.css';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Movie } from '../../models/movie';
-import { TmdbService } from '@/services/tmdb-service';
+import ApiService from '@/services/api-service';
 import posterNaImagePath from '@/assets/poster_na.jpg';
+import { Movie, createMovie } from '@/models/movie';
 
 export const DetailsView = () => {
     const { id } = useParams<{ id: string }>();
     const [movie, setMovie] = useState<Movie | null>(null);
 
     useEffect(() => {
-        TmdbService.getMovieById(id as string).then((movie) => setMovie(new Movie(movie)));
+        ApiService.getMovieById(id as string).then((movie) => setMovie(createMovie(movie)));
     }, [id]);
 
     if (!movie) {

@@ -1,41 +1,24 @@
-import { useDebounce } from "@/hooks/use-debounce";
-import { Movie } from "@/models/movie";
-import { useState, useEffect, useCallback } from "react";
+import { useAppDispatch, useAppSelector, useDebounce } from "@/app/hooks";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import style from "./style.module.css";
-import { TmdbService } from "@/services/tmdb-service";
+import { getMoviesList } from "./slice";
 
 export const SearchView = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState<Movie[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [isSearching, setIsSearching] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const dispatch = useAppDispatch();
+    const { isSearching, isError, keyword, currentPage, totalPages, movies }
+        = useAppSelector((state) => state.search);
 
+    const [searchQuery, setSearchQuery] = useState(keyword);
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
     const searchMovies = useCallback((page: number) => {
-        setIsError(false);
-        TmdbService.searchMovies(debouncedSearchQuery, page).then((response) => {
-            setIsSearching(false);
-            if (response.results) {
-                setSearchResults(response.results.map((movie) => new Movie(movie)));
-                setCurrentPage(response.page);
-                setTotalPages(response.total_pages);
-            } else {
-                setIsError(true);
-            }
-        });
-    }, [debouncedSearchQuery]);
+        dispatch(getMoviesList({ query: debouncedSearchQuery, page }));
+    }, [debouncedSearchQuery, dispatch]);
 
     useEffect(() => {
-        if (debouncedSearchQuery) {
-            setIsSearching(true);
-            setIsError(false);
+        if (debouncedSearchQuery.length > 2) {
             searchMovies(1);
-        } else {
-            setSearchResults([]);
         }
     }, [debouncedSearchQuery, searchMovies]);
 
@@ -56,7 +39,7 @@ export const SearchView = () => {
             {isError && <div>Something went wrong!</div>}
 
             <div className={style.results}>
-                {searchResults && searchResults.map((movie) => (
+                {movies && movies.map((movie) => (
                     <div key={movie.id} className={style.result}>
                         <Link to={`/details/${movie.id}`}>
                             {movie.title} {movie.releaseYear}

@@ -1,4 +1,4 @@
-export interface SearchMovieResult {
+export interface SearchResult {
     page: number;
     results: MovieResult[];
     total_pages: number;
