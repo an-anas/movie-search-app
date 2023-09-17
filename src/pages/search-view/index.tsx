@@ -8,6 +8,8 @@ import { TmdbService } from "@/services/tmdb-service";
 export const SearchView = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<Movie[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [isSearching, setIsSearching] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -18,9 +20,11 @@ export const SearchView = () => {
             setSearchResults([]);
             setIsSearching(true);
             setIsError(false);
-            TmdbService.searchMovies(debouncedSearchQuery, 1)
+            TmdbService.searchMovies(debouncedSearchQuery, page)
                 .then((response) => {
-                    setSearchResults(response.results.map(result=> new Movie(result)));
+                    setSearchResults(response.results.map(result => new Movie(result)));
+                    setPage(response.page);
+                    setTotalPages(response.total_pages);
                     setIsSearching(false);
                 })
                 .catch(() => {
@@ -29,8 +33,9 @@ export const SearchView = () => {
                 });
         } else {
             setSearchResults([]);
+            setTotalPages(0);
         }
-    }, [debouncedSearchQuery]);
+    }, [debouncedSearchQuery, page]);
 
     return (
         <>
@@ -43,18 +48,29 @@ export const SearchView = () => {
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
                 />
-                {isSearching && <div>Searching...</div>}
-                {isError && <div>Something went wrong!</div>}
+            </div>
 
-                <div className={style.results}>
-                    {searchResults && searchResults.map((movie) => (
-                        <div key={movie.id} className={style.result}>
-                            <Link to={`/details/${movie.id}`}>
-                                {movie.title} {movie.releaseYear}
-                            </Link>
-                        </div>
-                    ))}
-                </div>
+            {isSearching && <div>Searching...</div>}
+            {isError && <div>Something went wrong!</div>}
+
+            <div className={style.results}>
+                {searchResults && searchResults.map((movie) => (
+                    <div key={movie.id} className={style.result}>
+                        <Link to={`/details/${movie.id}`}>
+                            {movie.title} {movie.releaseYear}
+                        </Link>
+                    </div>
+                ))}
+
+                {totalPages > 1 && (
+                    <div className={style.pagination}>
+                        <button onClick={() => setPage(1)} disabled={page === 1}>First</button>
+                        <button onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
+                        <div className={style.page}>Page {page}</div>
+                        <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
+                        <button onClick={() => setPage(totalPages)} disabled={page === totalPages}>Last</button>
+                    </div>
+                )}
             </div>
         </>
     );

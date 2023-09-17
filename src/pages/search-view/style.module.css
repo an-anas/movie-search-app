@@ -5,7 +5,7 @@
 }
 
 .searchBar {
-    margin: 1rem;
+    margin: 2px;
 }
 
 .searchBar input {
@@ -28,4 +28,27 @@
 
 .result:hover {
     background-color: #f2f2f2;
+}
+
+.pagination button {
+    display: inline-block;
+    background-color: #679d69;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+
+    &:disabled {
+        background-color: #cccccc;
+        color: #666666;
+        cursor: not-allowed;
+    }
+}
+
+.page {
+    display: inline-block;
+    margin: 0 5px;
 }
