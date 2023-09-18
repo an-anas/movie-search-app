@@ -1,11 +1,12 @@
-import styles from './styles.module.css';
-import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import ApiService from '@/services/api-service';
+import { BackgroundContainer } from "@/components/background-container";
+import { Header } from "@/layout/header";
+import { Movie, createMovie } from "@/models/movie";
+import ApiService from "@/services/api-service";
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import styles from "./styles.module.css";
 import posterNaImagePath from '@/assets/poster_na.jpg';
-import { Movie, createMovie } from '@/models/movie';
-import { BackgroundContainer } from '@/components/background-container';
-import { Header } from '@/layout/header';
+import backgroundImagePath from "@/assets/background.png";
 
 export const DetailsView = () => {
     const { id } = useParams<{ id: string }>();
@@ -25,7 +26,7 @@ export const DetailsView = () => {
 
     const backdropPath = movie.backdropPath
         ? `https://image.tmdb.org/t/p/original${movie.backdropPath}`
-        : '/background.png';
+        : backgroundImagePath;
 
     return (
         <BackgroundContainer imagePath={backdropPath}>

@@ -1,9 +1,11 @@
 import { useAppDispatch, useAppSelector, useDebounce } from "@/app/hooks";
+import { BackgroundContainer } from "@/components/background-container";
+import { Header } from "@/layout/header";
 import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { selectSearchState, getMoviesList, clearSearchResults } from "./slice";
 import styles from "./styles.module.css";
-import { clearSearchResults, getMoviesList, selectSearchState } from "./slice";
-import { Header } from "@/layout/header";
+import backgroundImagePath from "@/assets/background.png";
 
 export const SearchView = () => {
     const dispatch = useAppDispatch();
@@ -31,7 +33,7 @@ export const SearchView = () => {
     }, [debouncedSearchQuery, dispatch, keyword, searchMovies, totalResults]);
 
     return (
-        <>
+        <BackgroundContainer imagePath={backgroundImagePath}>
             <Header />
             <div className={styles.searchBar}>
                 <input
@@ -67,6 +69,6 @@ export const SearchView = () => {
                     </div>
                 )}
             </div >
-        </>
+        </BackgroundContainer>
     );
 }
