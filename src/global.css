@@ -1,0 +1,31 @@
+  html {
+      box-sizing: border-box;
+      font-size: 62.5%;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+  }
+
+  body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.6rem;
+      height: 100%;
+      width: 100%;
+  }
+
+  *,
+  *:before,
+  *:after {
+      box-sizing: inherit;
+  }
+
+  #root {
+      height: 100%;
+      width: 100%;
+  }
+
+  :root {
+      --background-color-button: #679d69;
+      --background-color-button-hover: #5dbb62;
+      --background-color-button-disabled: lightgrey;
+  }

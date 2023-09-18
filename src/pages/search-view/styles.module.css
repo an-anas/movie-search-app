@@ -1,9 +1,3 @@
-.header {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-}
-
 .searchBar {
     margin: 2px;
 }
@@ -39,8 +33,8 @@
 
 .pagination button {
     display: inline-block;
-    background-color: #679d69;
-    border: none;
+    background-color: var(--background-color-button);
+    border: 2px solid var(--background-color-button);
     border-radius: 5px;
     color: white;
     padding: 6px 12px;
@@ -49,10 +43,11 @@
     cursor: pointer;
 
     &:hover {
-        background-color: #5dbb62;
+        background-color: var(--background-color-button-hover);
     }
     &:disabled {
-        background-color: #cccccc;
+        background-color: var(--background-color-button-disabled);
+        border: none;
         color: #666666;
         cursor: not-allowed;
     }

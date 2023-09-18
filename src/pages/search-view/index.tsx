@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector, useDebounce } from "@/app/hooks";
 import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
-import style from "./style.module.css";
+import styles from "./styles.module.css";
 import { clearSearchResults, getMoviesList, selectSearchState } from "./slice";
+import { Header } from "@/layout/header";
 
 export const SearchView = () => {
     const dispatch = useAppDispatch();
@@ -31,9 +32,8 @@ export const SearchView = () => {
 
     return (
         <>
-            <div className={style.header}>TMSE: The Movie Search Engine</div>
-            <hr />
-            <div className={style.searchBar}>
+            <Header />
+            <div className={styles.searchBar}>
                 <input
                     type="text"
                     placeholder="Search for a movie"
@@ -43,14 +43,14 @@ export const SearchView = () => {
             </div>
 
             {isSearching && (<div>Searching...</div>)}
-            {totalResults === 0 && !isSearching && (<div>No results found</div>)}
+            {!isSearching && isError && totalResults === 0 && (<div>No results found</div>)}
             {isError && <div>Something went wrong!</div>}
 
-            <div className={style.results}>
+            <div className={styles.results}>
                 {movies && movies.map((movie) => (
-                    <div className={style.resultContainer} key={movie.id}>
+                    <div className={styles.resultContainer} key={movie.id}>
                         <Link to={`/details/${movie.id}`}>
-                            <div key={movie.id} className={style.result}>
+                            <div key={movie.id} className={styles.result}>
                                 {movie.title} {movie.releaseYear}
                             </div>
                         </Link>
@@ -58,10 +58,10 @@ export const SearchView = () => {
                 ))}
 
                 {totalPages > 1 && (
-                    <div className={style.pagination}>
+                    <div className={styles.pagination}>
                         <button onClick={() => searchMovies(1)} disabled={currentPage === 1}>First</button>
                         <button onClick={() => searchMovies(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-                        <div className={style.page}>Page {currentPage} / {totalPages}</div>
+                        <div className={styles.page}>Page {currentPage} / {totalPages}</div>
                         <button onClick={() => searchMovies(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
                         <button onClick={() => searchMovies(totalPages)} disabled={currentPage === totalPages}>Last</button>
                     </div>
