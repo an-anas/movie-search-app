@@ -11,10 +11,15 @@ const ApiService = {
     },
     async getMoviesList(query: string, page: number): Promise<SearchResult> {
         const baseUrl = `https://api.themoviedb.org/3/search/movie`;
-        const apiKey = import.meta.env.VITE_API_KEY;
-        const url = `${baseUrl}?api_key=${apiKey}&language=en-US&query=${query}&page=${page}&include_adult=false`;
+        const params = new URLSearchParams({
+            api_key: import.meta.env.VITE_API_KEY,
+            language: 'en-US',
+            query,
+            page: page.toString(),
+            include_adult: 'false',
+        });
 
-        const response = await fetch(url);
+        const response = await fetch(`${baseUrl}?${params}`);
         return await response.json();
     }
 };
