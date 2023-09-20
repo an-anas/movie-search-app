@@ -1,6 +1,6 @@
 # The Movie search engine
 ## Description
-This application allows users to search for movies and view the results. The application uses the [OMDb API](http://www.omdbapi.com/) to retrieve movie data.  
+The Movie Search engine allows users to search for movies and view the results. This application was built using [React](https://reactjs.org/), [Redux](https://redux.js.org/), [TypeScript](https://www.typescriptlang.org/), and [Vite](https://vitejs.dev/). It uses the [OMDb API](http://www.omdbapi.com/) to retrieve movie data.  
 **You can view a <span style="color:#3e84f9;">live version</span> of the application [here](https://an-anas.github.io/).**
 ## Installation
 To install this application, clone the repository and run the following command:
