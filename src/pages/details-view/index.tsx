@@ -28,6 +28,10 @@ export const DetailsView = () => {
         ? `https://image.tmdb.org/t/p/original${movie.backdropPath}`
         : backgroundImagePath;
 
+    const overview = movie.overview
+        ? movie.overview
+        : 'No overview available';
+
     return (
         <BackgroundContainer imagePath={backdropPath}>
             <Header />
@@ -40,7 +44,7 @@ export const DetailsView = () => {
                 </div>
                 <div className={styles.title}>{movie.title}</div>
                 <div className={styles.releaseYear}>{movie.releaseYear}</div>
-                <div className={styles.overview}>{movie.overview}</div>
+                <div className={styles.overview}>{overview}</div>
             </div>
             <div className={styles.buttonContainer}>
                 <Link to={`/`}>

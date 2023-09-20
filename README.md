@@ -1,27 +1,15 @@
-# React + TypeScript + Vite
+# The Movie search engine
+## Description
+This application allows users to search for movies and view the results. The application uses the [OMDb API](http://www.omdbapi.com/) to retrieve movie data.  
+**You can view a <span style="color:#3e84f9;">live version</span> of the application [here](https://an-anas.github.io/).**
+## Installation
+To install this application, clone the repository and run the following command:
+```npm install```
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+To use this application, you need to have your own API key from OMDb. You can get one for free [here](http://www.omdbapi.com/apikey.aspx). Once you have your API key, you can add it to the application by creating a file called .env in the root directory of the application. In the .env file, add the following line:
+```VITE_API_KEY=YOUR_API_KEY```
+## Usage
+To use this application, run the following command:
+```npm run dev```
+## License
+This application is licensed under the MIT license.
