@@ -45,6 +45,7 @@
     &:hover {
         background-color: var(--background-color-button-hover);
     }
+
     &:disabled {
         background-color: var(--background-color-button-disabled);
         border: none;
@@ -56,4 +57,10 @@
 .page {
     display: inline-block;
     margin: 0 5px;
+}
+
+@media (max-width: 768px) {
+    .result {
+        font-size: 1.2rem;
+    }
 }
