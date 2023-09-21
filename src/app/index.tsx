@@ -7,7 +7,7 @@ import { store } from "./store";
 export const App = () => {
     return (
         <Provider store={store}>
-            <BrowserRouter>
+            <BrowserRouter basename={import.meta.env.BASE_URL}>
                 <Routes>
                     <Route path="/" element={<SearchView />} />
                     <Route path="/details/:id" element={<DetailsView />} />
